@@ -171,8 +171,15 @@
         }
         
         /* Hero Section */
-        .hero 
- 
+        .hero {
+            background: linear-gradient(rgba(46, 125, 50, 0.9), rgba(27, 94, 32, 0.9)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 10rem 0 8rem;
+            margin-top: 70px;
+        }
         
         .hero h1 {
             margin-bottom: 1rem;
@@ -191,6 +198,43 @@
             justify-content: center;
         }
         
+        /* Live Portfolio Badges */
+        .portfolio-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: white;
+            color: var(--dark-color);
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .badge.github {
+            background-color: #24292e;
+            color: white;
+        }
+        
+        .badge.netlify {
+            background-color: #00c7b7;
+            color: white;
+        }
+        
         /* About Section */
         .about-content {
             display: grid;
@@ -203,11 +247,13 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: var(--shadow);
+            height: 400px;
         }
         
         .about-img img {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
             transition: var(--transition);
         }
@@ -585,6 +631,7 @@
             .about-img {
                 max-width: 400px;
                 margin: 0 auto;
+                height: 350px;
             }
         }
         
@@ -630,6 +677,11 @@
             .hero-btns .btn {
                 width: 80%;
                 max-width: 300px;
+            }
+            
+            .portfolio-badges {
+                flex-direction: column;
+                align-items: center;
             }
             
             .social-grid {
@@ -686,6 +738,17 @@
             <h1>TajTech940</h1>
             <h3>Full Stack Web Developer & Shopify Expert</h3>
             <p>I create responsive, user-friendly websites and e-commerce solutions with modern technologies. Passionate about building digital experiences that drive results.</p>
+            
+            <!-- Live Portfolio Badges -->
+            <div class="portfolio-badges">
+                <a href="https://tajtech940.github.io" target="_blank" class="badge github">
+                    <i class="fab fa-github"></i> GitHub Pages
+                </a>
+                <a href="https://tajtech940.netlify.app" target="_blank" class="badge netlify">
+                    <i class="fas fa-cloud"></i> Netlify Hosted
+                </a>
+            </div>
+            
             <div class="hero-btns">
                 <a href="#projects" class="btn">View My Work</a>
                 <a href="#contact" class="btn btn-accent">Get In Touch</a>
@@ -693,15 +756,24 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About Section with YOUR REAL PHOTO -->
     <section id="about" class="about">
         <div class="container">
             <h2>About Me</h2>
             <div class="about-content">
-             
+                <!-- YOUR REAL PHOTO -->
+                <div class="about-img">
+                    <img src="https://raw.githubusercontent.com/tajtech940/tajtech940.github.io/main/profile.jpg.jpg" 
+                         alt="TajTech940 - Web Developer"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80'">
+                </div>
                 <div class="about-text">
                     <h3>Hello! I'm TajTech940, a passionate web developer</h3>
                     <p>🎓 <strong>Education:</strong> Jigjiga University</p>
+                    <p>🚀 <strong>Live Portfolios:</strong> 
+                        <a href="https://tajtech940.github.io" target="_blank" style="color: var(--primary-color);">GitHub Pages</a> • 
+                        <a href="https://tajtech940.netlify.app" target="_blank" style="color: var(--accent-color);">Netlify</a>
+                    </p>
                     <p>I have experience building websites, e-commerce stores, and web applications. My expertise includes HTML, CSS, JavaScript, React, and Shopify development.</p>
                     <p>I enjoy turning ideas into functional, beautiful digital products. When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, or helping others learn programming.</p>
                     <p>My goal is to build applications that are both visually appealing and highly functional, providing excellent user experiences.</p>
@@ -754,7 +826,7 @@
                     </div>
                 </div>
                 
-                <!-- Project 2 -->
+                <!-- Shopify Store -->
                 <div class="project-card">
                     <div class="project-img">
                         <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Shopify Store">
@@ -769,17 +841,17 @@
                     </div>
                 </div>
                 
-                <!-- Project 3 -->
+                <!-- Portfolio Website Project -->
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=870&q=80" alt="Portfolio Website">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Portfolio Website">
                     </div>
                     <div class="project-info">
                         <h3>Portfolio Website</h3>
-                        <p>A responsive portfolio website showcasing projects and skills. Features modern design, smooth animations, and contact form functionality.</p>
+                        <p>This responsive portfolio website built with HTML, CSS, and JavaScript. Deployed on GitHub Pages and Netlify.</p>
                         <div class="project-links">
-                            <a href="#" class="btn">Live Demo</a>
-                            <a href="https://github.com/tajtech940" target="_blank" class="btn btn-accent">View Code</a>
+                            <a href="https://tajtech940.github.io" target="_blank" class="btn">GitHub Pages</a>
+                            <a href="https://tajtech940.netlify.app" target="_blank" class="btn btn-accent">Netlify</a>
                         </div>
                     </div>
                 </div>
@@ -941,6 +1013,19 @@
                     
                     <div class="contact-item">
                         <div class="contact-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div>
+                            <h4>Live Portfolios</h4>
+                            <p>
+                                <a href="https://tajtech940.github.io" target="_blank" style="color: var(--primary-color);">GitHub Pages</a><br>
+                                <a href="https://tajtech940.netlify.app" target="_blank" style="color: var(--accent-color);">Netlify</a>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
                             <i class="fas fa-envelope"></i>
                         </div>
                         <div>
@@ -1015,6 +1100,16 @@
             <a href="#home" class="logo" style="color: white; margin-bottom: 1rem;">Taj<span>Tech940</span></a>
             <p>Web Developer & Shopify Expert</p>
             
+            <!-- Portfolio Badges in Footer -->
+            <div class="portfolio-badges" style="margin: 1.5rem 0;">
+                <a href="https://tajtech940.github.io" target="_blank" class="badge github">
+                    <i class="fab fa-github"></i> GitHub Pages
+                </a>
+                <a href="https://tajtech940.netlify.app" target="_blank" class="badge netlify">
+                    <i class="fas fa-cloud"></i> Netlify Hosted
+                </a>
+            </div>
+            
             <div class="social-links">
                 <a href="https://github.com/tajtech940" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="https://web.facebook.com/tajushekabdi" target="_blank"><i class="fab fa-facebook"></i></a>
@@ -1025,13 +1120,21 @@
             
             <div class="copyright">
                 <p>&copy; 2023 TajTech940. All rights reserved.</p>
+                <p>🌐 Portfolios: 
+                    <a href="https://tajtech940.github.io" target="_blank" style="color: #aaa;">GitHub Pages</a> • 
+                    <a href="https://tajtech940.netlify.app" target="_blank" style="color: #aaa;">Netlify</a>
+                </p>
                 <p>🎓 Education: Jigjiga University | 📧 Email: abuuafham@gmail.com | 📱 Phone: +251 953 007845</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Log personal information to console
+        // Updated console logs with your live sites and photo
+        console.log('🚀 LIVE PORTFOLIOS:');
+        console.log('🌐 GitHub Pages: https://tajtech940.github.io');
+        console.log('☁️ Netlify: https://tajtech940.netlify.app');
+        console.log('📸 Photo: https://raw.githubusercontent.com/tajtech940/tajtech940.github.io/main/profile.jpg.jpg');
         console.log('🎓 Education: Jigjiga University');
         console.log('💻 GitHub: https://github.com/tajtech940');
         console.log('Facebook: https://web.facebook.com/tajushekabdi');
@@ -1131,12 +1234,6 @@
                 document.body.style.overflow = 'auto';
             }
         });
-        
-        // Add additional skills related to the Oromia Marketplace project
-        console.log('🚀 Featured Project: Oromia Marketplace');
-        console.log('📁 Project Structure: Full MERN stack + AI integration');
-        console.log('💡 Features: AI recommendations, multi-vendor, Ethiopian payment integration');
-        console.log('🛠️ Tech Stack: React, Node.js, MongoDB, Express, Python, Scikit-learn');
     </script>
 </body>
 </html>

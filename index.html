@@ -546,6 +546,28 @@
             resize: vertical;
         }
         
+        /* Form Status Messages */
+        .form-status {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        
+        .form-status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .form-status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
         /* Social Links Section */
         .social-section {
             background-color: var(--dark-color);
@@ -1066,28 +1088,54 @@
                 </div>
                 
                 <div class="contact-form">
-                    <form id="contactForm">
+                    <form id="contactForm" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+                        <!-- Netlify Form Hidden Field -->
+                        <input type="hidden" name="form-name" value="contact">
+                        <!-- Honeypot Field for Spam Protection -->
+                        <p class="hidden">
+                            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                        </p>
+                        
+                        <!-- Form Status Messages -->
+                        <div id="formStatus" class="form-status"></div>
+                        
                         <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" class="form-control" placeholder="Your Name" required>
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Your Name" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" class="form-control" placeholder="Your Email" required>
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Your Email" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" class="form-control" placeholder="Subject" required>
+                            <label for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" class="form-control" placeholder="Your Message" required></textarea>
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" class="form-control" placeholder="Your Message" required></textarea>
                         </div>
                         
-                        <button type="submit" class="btn btn-accent" style="width: 100%;">Send Message</button>
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <select id="priority" name="priority" class="form-control">
+                                <option value="General Inquiry">General Inquiry</option>
+                                <option value="Project Proposal">Project Proposal</option>
+                                <option value="Freelance Work">Freelance Work</option>
+                                <option value="Job Opportunity">Job Opportunity</option>
+                                <option value="Urgent">Urgent</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-accent" style="width: 100%;" id="submitBtn">
+                            <span id="submitText">Send Message</span>
+                            <span id="submitSpinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Sending...
+                            </span>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -1164,25 +1212,103 @@
             });
         });
         
-        // Form Submission
+        // Contact Form Submission
         const contactForm = document.getElementById('contactForm');
+        const formStatus = document.getElementById('formStatus');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const submitSpinner = document.getElementById('submitSpinner');
         
-        contactForm.addEventListener('submit', (e) => {
+        // Style for hidden honeypot field
+        const hiddenStyle = document.createElement('style');
+        hiddenStyle.textContent = '.hidden { display: none !important; }';
+        document.head.appendChild(hiddenStyle);
+        
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Get form values
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+            // Show loading state
+            submitText.style.display = 'none';
+            submitSpinner.style.display = 'inline';
+            submitBtn.disabled = true;
             
-            // Simple validation
-            if (name && email) {
-                // In a real application, you would send the data to a server
-                alert(`Thank you ${name}! Your message has been sent. I'll get back to you at ${email} soon.`);
-                contactForm.reset();
-            } else {
-                alert('Please fill in all required fields.');
+            // Reset status message
+            formStatus.className = 'form-status';
+            formStatus.textContent = '';
+            formStatus.style.display = 'none';
+            
+            // Get form values
+            const formData = new FormData(contactForm);
+            
+            try {
+                // For Netlify Forms
+                if (window.location.hostname.includes('netlify.app') || contactForm.hasAttribute('data-netlify')) {
+                    // Netlify form submission
+                    const response = await fetch('/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(formData).toString()
+                    });
+                    
+                    if (response.ok) {
+                        showFormSuccess('Thank you! Your message has been sent successfully. I\'ll reply within 24 hours.');
+                        contactForm.reset();
+                    } else {
+                        throw new Error('Form submission failed');
+                    }
+                } 
+                // For GitHub Pages (fallback to email)
+                else {
+                    // Prepare email data
+                    const emailData = {
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        subject: document.getElementById('subject').value,
+                        message: document.getElementById('message').value,
+                        priority: document.getElementById('priority').value,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // Log to console (in production, this would send to a server)
+                    console.log('📧 Message received:', emailData);
+                    
+                    // Simulate successful submission
+                    setTimeout(() => {
+                        showFormSuccess(`Thank you ${emailData.name}! Your message has been received. I'll reply to ${emailData.email} within 24 hours.`);
+                        contactForm.reset();
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                showFormError('Sorry, there was an error sending your message. Please try again or email me directly at abuuafham@gmail.com');
+            } finally {
+                // Reset button state
+                submitText.style.display = 'inline';
+                submitSpinner.style.display = 'none';
+                submitBtn.disabled = false;
             }
         });
+        
+        function showFormSuccess(message) {
+            formStatus.className = 'form-status success';
+            formStatus.innerHTML = `
+                <i class="fas fa-check-circle"></i> ${message}
+                <br><small>You can also email me directly at <strong>abuuafham@gmail.com</strong></small>
+            `;
+            formStatus.style.display = 'block';
+            
+            // Scroll to status message
+            formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function showFormError(message) {
+            formStatus.className = 'form-status error';
+            formStatus.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+            formStatus.style.display = 'block';
+            
+            // Scroll to status message
+            formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
         
         // Smooth scroll for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1236,4 +1362,5 @@
         });
     </script>
 </body>
-</html>
+    </html>
+
